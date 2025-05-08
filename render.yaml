@@ -15,8 +15,13 @@ services:
   - type: web
     name: 2dollarstore-frontend
     env: node
-    buildCommand: cd frontend && npm install && npm run build
+    buildCommand: |
+      cd frontend
+      npm install
+      npm install -g serve
+      npm run build
     startCommand: cd frontend && serve -s build
     envVars:
       - key: REACT_APP_API_URL
-        sync: false 
+        sync: false
+    nodeVersion: 18.17.0 
