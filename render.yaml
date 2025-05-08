@@ -18,9 +18,11 @@ services:
     buildCommand: |
       cd frontend
       npm install --legacy-peer-deps
+      npm audit fix --force
       npm install -g serve
       npm install react-scripts --save
       chmod +x node_modules/.bin/react-scripts
+      export PATH=$PATH:$(npm bin)
       npm run build
     startCommand: cd frontend && serve -s build
     envVars:
