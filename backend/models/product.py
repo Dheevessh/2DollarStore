@@ -1,27 +1,27 @@
-from app import db
+from extensions import db
 from datetime import datetime
 
 class Product(db.Model):
     __tablename__ = 'products'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
+    name = db.Column(db.String(200), nullable=False)
+    price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text)
     image_url = db.Column(db.String(500))
-    source_url = db.Column(db.String(500))
-    source_price = db.Column(db.Float)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    aliexpress_url = db.Column(db.String(500))
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     is_active = db.Column(db.Boolean, default=True)
 
     def to_dict(self):
         return {
             'id': self.id,
-            'title': self.title,
+            'name': self.name,
+            'price': self.price,
             'description': self.description,
             'image_url': self.image_url,
-            'price': 2.00,  # Always return $2 as the price
-            'source_url': self.source_url,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'aliexpress_url': self.aliexpress_url,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None
         } 

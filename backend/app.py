@@ -1,12 +1,10 @@
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_cors import CORS
 from datetime import datetime
 import os
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
-from api.scraper import scrape_aliexpress_products
+from extensions import db, migrate
 
 # Load environment variables
 load_dotenv()
@@ -20,9 +18,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///2do
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev')
 
-# Initialize database
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+# Initialize extensions
+db.init_app(app)
+migrate.init_app(app, db)
 
 # Import models
 from models.product import Product
@@ -48,6 +46,7 @@ def health_check():
 if __name__ == '__main__':
     # Start the scheduler
     scheduler = BackgroundScheduler()
+    from api.scraper import scrape_aliexpress_products
     scheduler.add_job(scrape_aliexpress_products, 'interval', days=1)
     scheduler.start()
     
