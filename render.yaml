@@ -19,10 +19,8 @@ services:
       cd frontend
       rm -rf node_modules package-lock.json
       npm cache clean --force
-      npm install --legacy-peer-deps
+      npm install --legacy-peer-deps --force
       npm install -g serve
-      npm install @babel/plugin-transform-private-methods @babel/plugin-transform-numeric-separator @babel/plugin-transform-nullish-coalescing-operator @babel/plugin-transform-class-properties @babel/plugin-transform-private-property-in-object @babel/plugin-transform-optional-chaining --save-dev
-      npm install nth-check@latest postcss@latest --save-dev
       npm run build
     startCommand: cd frontend && serve -s build
     envVars:
