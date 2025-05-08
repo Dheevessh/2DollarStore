@@ -1,6 +1,6 @@
 from app import app
 from apscheduler.schedulers.background import BackgroundScheduler
-from scraper import scrape_aliexpress_products
+from api.scraper import scrape_aliexpress_products
 
 # Start the scheduler
 scheduler = BackgroundScheduler()

@@ -6,7 +6,7 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
-from scraper import scrape_aliexpress_products
+from api.scraper import scrape_aliexpress_products
 
 # Load environment variables
 load_dotenv()
