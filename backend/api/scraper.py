@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from models.product import Product
-from app import db
+from extensions import db
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -10,7 +10,7 @@ from datetime import datetime
 
 scraper_bp = Blueprint('scraper', __name__)
 
-def scrape_aliexpress():
+def scrape_aliexpress_products():
     # This is a simplified version. In production, you'd want to use Selenium
     # or a proper scraping service to handle JavaScript and avoid being blocked
     headers = {
@@ -38,11 +38,12 @@ def scrape_aliexpress():
                 
                 if price <= 1.50:  # Only include items under $1.50
                     products.append({
-                        'title': title,
-                        'source_price': price,
+                        'name': title,
+                        'price': 2.00,  # Always $2 in our store
+                        'description': f'Imported from AliExpress. Original price: ${price:.2f}',
                         'image_url': image_url,
-                        'source_url': source_url,
-                        'description': f'Imported from AliExpress. Original price: ${price:.2f}'
+                        'aliexpress_url': source_url,
+                        'is_active': True
                     })
             except (AttributeError, ValueError) as e:
                 continue
@@ -58,7 +59,7 @@ def refresh_products():
     Product.query.update({'is_active': False})
     
     # Scrape new products
-    new_products = scrape_aliexpress()
+    new_products = scrape_aliexpress_products()
     
     # Add new products to database
     for product_data in new_products:
